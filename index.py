@@ -1,4 +1,3 @@
-from mangum import Mangum
 from fastapi import FastAPI
 from database import engine
 
@@ -18,5 +17,3 @@ async def root():
 @app.get("/hello/{name}")
 async def say_hello(name: str):
     return {"message": f"Hello {name}"}
-
-handler = Mangum(app)
