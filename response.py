@@ -1,3 +1,4 @@
+from typing import List
 from fastapi import APIRouter, status, Depends
 import models
 from database import get_db
@@ -7,7 +8,7 @@ import schemas
 
 router = APIRouter(
     prefix='/wishs',
-    tags=['Posts']
+    tags=['Wishes']
 )
 
 
@@ -24,3 +25,11 @@ async def create_item(item: schemas.UserCreate, db: Session = Depends(get_db)):
     db.commit()
     db.refresh(post)
     return [post]
+
+
+@router.get('/admin/guests', response_model=List[schemas.UserCreate])
+async def get_itemss(db: Session = Depends(get_db)):
+
+    post = db.query(models.User).all()
+
+    return post

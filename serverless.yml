@@ -1,0 +1,61 @@
+# "service" is the name of this project. This will also be added to your AWS resource names.
+service: celebrate-be
+frameworkVersion: "4"
+
+plugins:
+  - serverless-python-requirements
+  - serverless-domain-manager
+  - serverless-localstack
+
+provider:
+  name: aws
+  runtime: python3.10
+  stage: ${opt:stage, "dev"}
+  region: us-east-1
+  deploymentBucket:
+    name: celebrate-be
+
+package:
+  exclude:
+    - Makefile
+    - poetry.lock
+    - README.md
+    - tests/**
+    - docs/**
+    - node_modules/**
+    - .venv/**
+    - .serverless/**
+    - package.json
+    - package-lock.json
+    - .pytest_cache
+    - .hypothesis
+
+custom:
+  pythonRequirements:
+    dockerizePip: true
+    layer:
+      name: celebrate-be-deps
+      description: Dependencies of serverless-fastapi
+      compatibleRuntimes:
+        - python3.10
+  localstack:
+    stages:
+      - local
+
+functions:
+  app:
+    handler: app.handler
+    environment:
+      STAGE: ${self:provider.stage}
+    layers:
+      - { Ref: PythonRequirementsLambdaLayer }
+    events:
+      - http:
+          method: any
+          path: /{proxy+}
+  hello:
+    handler: handler.hello
+    events:
+      - httpApi:
+          path: /
+          method: get
