@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from supabase import Client, create_client
 import admin
 from database import SUPABASE_KEY, SUPABASE_URL
@@ -6,6 +7,18 @@ from database import SUPABASE_KEY, SUPABASE_URL
 import response
 
 app = FastAPI()
+
+# NOT recommended - see details below
+origins = ['https://celebrate-be.vercel.app/']
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 app.include_router(response.router)
 app.include_router(admin.router)
 # Initialize Supabase client
