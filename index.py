@@ -8,8 +8,16 @@ import response
 
 app = FastAPI()
 
-# NOT recommended - see details below
-origins = ['https://celebrate-be.vercel.app/']
+
+# Add CORS middleware
+origins = [
+    "http://localhost.tiangolo.com",
+    "https://localhost.tiangolo.com",
+    "http://localhost",
+    "http://localhost:8080",
+    "https://celebrate-xi.vercel.app",
+    "https://celebrate-be.vercel.app"
+]
 
 app.add_middleware(
     CORSMiddleware,
