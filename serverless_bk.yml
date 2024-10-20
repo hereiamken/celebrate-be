@@ -1,8 +1,0 @@
-service: celebrate-be
-frameworkVersion: "4"
-
-provider:
-  name: aws
-  runtime: python3.10
-  stage: ${opt:stage, 'dev'}
-  region: ${opt:region, 'us-east-1'}
