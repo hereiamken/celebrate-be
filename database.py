@@ -1,22 +1,14 @@
 from dotenv import load_dotenv
-from sqlalchemy import create_engine
-
-from sqlalchemy.orm import sessionmaker
-from sqlalchemy.ext.declarative import declarative_base
+from supabase import create_client, Client
 import os
 
+
 load_dotenv()
-DB_URL = DB_URL = os.getenv("DB_URL")
-engine = create_engine(DB_URL, pool_size=10, max_overflow=30)
+SUPABASE_URL = os.getenv("SUPABASE_URL")
+SUPABASE_KEY = os.getenv("NEXT_PUBLIC_SUPABASE_ANON_KEY")
 
-Sessionlocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-
-Base = declarative_base()
-
-
-def get_db():
-    db = Sessionlocal()
-    try:
-        yield db
-    finally:
-        db.close()
+# Initialize Supabase client
+def get_supabase_client() -> Client:
+    client = create_client(SUPABASE_URL, SUPABASE_KEY)
+    print(client)
+    return client

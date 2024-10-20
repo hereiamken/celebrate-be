@@ -1,17 +1,20 @@
 from pydantic import BaseModel
 
-
-class UserBase(BaseModel):
-    class Config:
-        orm_mode = True
-
-
-class UserCreate(UserBase):
+class UserReq(BaseModel):
     name: str
-    phoneNumber: str
-    wish: str
-    attend: bool
+    phoneNumber: str = None
+    wish: str = None
+    attend: bool = False
     cdcr: str
 
+class LoginRequest(BaseModel):
+    username: str
+    password: str
+
     class Config:
-        orm_mode = True
+        json_schema_extra = {
+            "example": {
+                "username": "abdulazeez@x.com",
+                "password": "weakpassword"
+            }
+        }

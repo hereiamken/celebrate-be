@@ -1,12 +1,15 @@
 from fastapi import FastAPI
-from database import engine
+from supabase import Client, create_client
+import admin
+from database import SUPABASE_KEY, SUPABASE_URL
 
-import models
 import response
 
 app = FastAPI()
-models.Base.metadata.create_all(bind=engine)
 app.include_router(response.router)
+app.include_router(admin.router)
+# Initialize Supabase client
+supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
 
 @app.get("/")
